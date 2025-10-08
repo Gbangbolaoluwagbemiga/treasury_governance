@@ -101,8 +101,7 @@ mod treasury_governance {
     }
 
     /// Vote Choice
-    #[derive(Debug, Clone, PartialEq, Eq)]
-    #[ink::scale_derive(Encode, Decode, TypeInfo)]
+    #[derive(Debug, Clone, PartialEq, Eq, scale::Encode, scale::Decode, scale_info::TypeInfo)]
     #[cfg_attr(feature = "std", derive(ink::storage::traits::StorageLayout))]
     pub struct VoteChoice {
         pub option_index: u32,
@@ -110,8 +109,7 @@ mod treasury_governance {
     }
 
     /// Proposal Status
-    #[derive(Debug, Clone, PartialEq, Eq)]
-    #[ink::scale_derive(Encode, Decode, TypeInfo)]
+    #[derive(Debug, Clone, PartialEq, Eq, scale::Encode, scale::Decode, scale_info::TypeInfo)]
     #[cfg_attr(feature = "std", derive(ink::storage::traits::StorageLayout))]
     pub enum ProposalStatus {
         Active,
@@ -122,8 +120,7 @@ mod treasury_governance {
     }
 
     /// Main Proposal Structure
-    #[derive(Debug, Clone, PartialEq, Eq)]
-    #[ink::scale_derive(Encode, Decode, TypeInfo)]
+    #[derive(Debug, Clone, PartialEq, Eq, scale::Encode, scale::Decode, scale_info::TypeInfo)]
     #[cfg_attr(feature = "std", derive(ink::storage::traits::StorageLayout))]
     pub struct Proposal {
         pub id: u32,
@@ -142,8 +139,7 @@ mod treasury_governance {
     }
 
     /// Vote Record
-    #[derive(Debug, Clone, PartialEq, Eq)]
-    #[ink::scale_derive(Encode, Decode, TypeInfo)]
+    #[derive(Debug, Clone, PartialEq, Eq, scale::Encode, scale::Decode, scale_info::TypeInfo)]
     #[cfg_attr(feature = "std", derive(ink::storage::traits::StorageLayout))]
     pub struct Vote {
         pub voter: AccountId,
