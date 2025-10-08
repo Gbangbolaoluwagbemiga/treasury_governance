@@ -14,6 +14,9 @@ mod tests {
         let mut contract = TreasuryGovernance::new();
         let accounts = ink::env::test::default_accounts();
         
+        // Set the caller to alice before registering
+        ink::env::test::set_caller(accounts.alice);
+        
         // Register voter
         assert!(contract.register_voter().is_ok());
         assert_eq!(contract.get_total_voters(), 1);
@@ -23,7 +26,10 @@ mod tests {
     #[ink::test]
     fn proposal_creation_works() {
         let mut contract = TreasuryGovernance::new();
-        let _accounts = ink::env::test::default_accounts();
+        let accounts = ink::env::test::default_accounts();
+        
+        // Set the caller to alice before registering
+        ink::env::test::set_caller(accounts.alice);
         
         // Register voter first
         contract.register_voter().unwrap();
@@ -56,6 +62,9 @@ mod tests {
     fn voting_works() {
         let mut contract = TreasuryGovernance::new();
         let accounts = ink::env::test::default_accounts();
+        
+        // Set the caller to alice before registering
+        ink::env::test::set_caller(accounts.alice);
         
         // Register voter
         contract.register_voter().unwrap();
@@ -91,7 +100,10 @@ mod tests {
     #[ink::test]
     fn double_voting_prevention() {
         let mut contract = TreasuryGovernance::new();
-        let _accounts = ink::env::test::default_accounts();
+        let accounts = ink::env::test::default_accounts();
+        
+        // Set the caller to alice before registering
+        ink::env::test::set_caller(accounts.alice);
         
         // Register voter
         contract.register_voter().unwrap();
@@ -125,6 +137,10 @@ mod tests {
     #[ink::test]
     fn invalid_voting_options() {
         let mut contract = TreasuryGovernance::new();
+        let accounts = ink::env::test::default_accounts();
+        
+        // Set the caller to alice before registering
+        ink::env::test::set_caller(accounts.alice);
         
         // Register voter
         contract.register_voter().unwrap();
@@ -169,7 +185,10 @@ mod tests {
     #[ink::test]
     fn quorum_calculation() {
         let mut contract = TreasuryGovernance::new();
-        let _accounts = ink::env::test::default_accounts();
+        let accounts = ink::env::test::default_accounts();
+        
+        // Set the caller to alice before registering
+        ink::env::test::set_caller(accounts.alice);
         
         // Register multiple voters
         contract.register_voter().unwrap();
@@ -204,7 +223,10 @@ mod tests {
     #[ink::test]
     fn proposal_status_update() {
         let mut contract = TreasuryGovernance::new();
-        let _accounts = ink::env::test::default_accounts();
+        let accounts = ink::env::test::default_accounts();
+        
+        // Set the caller to alice before registering
+        ink::env::test::set_caller(accounts.alice);
         
         // Register voter
         contract.register_voter().unwrap();
@@ -243,7 +265,10 @@ mod tests {
     #[ink::test]
     fn proposal_execution() {
         let mut contract = TreasuryGovernance::new();
-        let _accounts = ink::env::test::default_accounts();
+        let accounts = ink::env::test::default_accounts();
+        
+        // Set the caller to alice before registering
+        ink::env::test::set_caller(accounts.alice);
         
         // Register voter
         contract.register_voter().unwrap();
@@ -282,7 +307,10 @@ mod tests {
     #[ink::test]
     fn proposal_results_and_statistics() {
         let mut contract = TreasuryGovernance::new();
-        let _accounts = ink::env::test::default_accounts();
+        let accounts = ink::env::test::default_accounts();
+        
+        // Set the caller to alice before registering
+        ink::env::test::set_caller(accounts.alice);
         
         // Register voter
         contract.register_voter().unwrap();
