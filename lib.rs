@@ -7,6 +7,7 @@ mod treasury_governance {
     use ink::prelude::vec::Vec;
     use ink::prelude::string::String;
     use ink::storage::Mapping;
+    use ink::primitives::H160;
 
     /// Proposal Types
     #[derive(Debug, Clone, PartialEq, Eq, scale::Encode, scale::Decode, scale_info::TypeInfo)]
@@ -129,7 +130,7 @@ mod treasury_governance {
         pub proposal_type: ProposalType,
         pub governance_params: GovernanceParameters,
         pub voting_options: VotingOptions,
-        pub proposer: AccountId,
+        pub proposer: H160,
         pub created_at: u32,
         pub voting_end: u32,
         pub execution_time: u32,
@@ -142,15 +143,14 @@ mod treasury_governance {
     #[derive(Debug, Clone, PartialEq, Eq, scale::Encode, scale::Decode, scale_info::TypeInfo)]
     #[cfg_attr(feature = "std", derive(ink::storage::traits::StorageLayout))]
     pub struct Vote {
-        pub voter: AccountId,
+        pub voter: H160,
         pub choice: VoteChoice,
         pub timestamp: u32,
         pub weight: u128,
     }
 
     /// Contract Statistics
-    #[derive(Debug, Clone, PartialEq, Eq)]
-    #[ink::scale_derive(Encode, Decode, TypeInfo)]
+    #[derive(Debug, Clone, PartialEq, Eq, scale::Encode, scale::Decode, scale_info::TypeInfo)]
     pub struct ContractStats {
         pub total_proposals: u32,
         pub active_proposals: u32,
@@ -159,8 +159,7 @@ mod treasury_governance {
     }
 
     /// Proposal Results
-    #[derive(Debug, Clone, PartialEq, Eq)]
-    #[ink::scale_derive(Encode, Decode, TypeInfo)]
+    #[derive(Debug, Clone, PartialEq, Eq, scale::Encode, scale::Decode, scale_info::TypeInfo)]
     pub struct ProposalResults {
         pub proposal_id: u32,
         pub vote_counts: Vec<u128>,
@@ -171,8 +170,7 @@ mod treasury_governance {
     }
 
     /// Custom Error Types
-    #[derive(Debug, PartialEq, Eq)]
-    #[ink::scale_derive(Encode, Decode, TypeInfo)]
+    #[derive(Debug, PartialEq, Eq, scale::Encode, scale::Decode, scale_info::TypeInfo)]
     pub enum Error {
         ProposalNotFound,
         ProposalNotActive,
@@ -189,39 +187,7 @@ mod treasury_governance {
 
     pub type Result<T> = core::result::Result<T, Error>;
 
-    /// Events
-    #[ink(event)]
-    pub struct ProposalCreated {
-        #[ink(topic)]
-        proposal_id: u32,
-        #[ink(topic)]
-        proposer: AccountId,
-        title: String,
-    }
 
-    #[ink(event)]
-    pub struct VoteCast {
-        #[ink(topic)]
-        proposal_id: u32,
-        #[ink(topic)]
-        voter: AccountId,
-        option_index: u32,
-        option_text: String,
-        weight: u128,
-    }
-
-    #[ink(event)]
-    pub struct ProposalExecuted {
-        #[ink(topic)]
-        proposal_id: u32,
-        status: ProposalStatus,
-    }
-
-    #[ink(event)]
-    pub struct VoterRegistered {
-        #[ink(topic)]
-        voter: AccountId,
-    }
 
     /// Main Contract Storage
     #[ink(storage)]
@@ -231,15 +197,15 @@ mod treasury_governance {
         /// All proposals
         proposals: Mapping<u32, Proposal>,
         /// User votes on proposals (proposal_id -> voter -> Vote)
-        votes: Mapping<(u32, AccountId), Vote>,
+        votes: Mapping<(u32, H160), Vote>,
         /// List of all proposal IDs
         proposal_ids: Vec<u32>,
         /// Total number of registered voters (for quorum calculation)
         total_voters: u32,
         /// Contract owner
-        owner: AccountId,
+        owner: H160,
         /// Registered voters
-        registered_voters: Mapping<AccountId, bool>,
+        registered_voters: Mapping<H160, bool>,
     }
 
     impl TreasuryGovernance {
@@ -269,7 +235,7 @@ mod treasury_governance {
             self.registered_voters.insert(caller, &true);
             self.total_voters = self.total_voters.saturating_add(1);
 
-            self.env().emit_event(VoterRegistered { voter: caller });
+            // self.env().emit_event(VoterRegistered { voter: caller });
             Ok(())
         }
 
@@ -325,11 +291,7 @@ mod treasury_governance {
             let proposal_id = self.next_proposal_id;
             self.next_proposal_id = self.next_proposal_id.saturating_add(1);
 
-            self.env().emit_event(ProposalCreated {
-                proposal_id,
-                proposer: self.env().caller(),
-                title,
-            });
+            
 
             Ok(proposal_id)
         }
@@ -393,13 +355,7 @@ mod treasury_governance {
             // Update proposal
             self.proposals.insert(proposal_id, &proposal);
 
-            self.env().emit_event(VoteCast {
-                proposal_id,
-                voter: caller,
-                option_index,
-                option_text: proposal.voting_options.options[option_index as usize].clone(),
-                weight: 1,
-            });
+    
 
             Ok(())
         }
@@ -482,11 +438,6 @@ mod treasury_governance {
             proposal.status = ProposalStatus::Executed;
             self.proposals.insert(proposal_id, &proposal);
 
-            self.env().emit_event(ProposalExecuted {
-                proposal_id,
-                status: ProposalStatus::Executed,
-            });
-
             Ok(())
         }
 
@@ -505,7 +456,7 @@ mod treasury_governance {
 
         /// Get user's vote on a proposal
         #[ink(message)]
-        pub fn get_user_vote(&self, proposal_id: u32, user: AccountId) -> Result<Vote> {
+        pub fn get_user_vote(&self, proposal_id: u32, user: H160) -> Result<Vote> {
             self.votes.get((proposal_id, user))
                 .ok_or(Error::ProposalNotFound)
         }
@@ -651,7 +602,7 @@ mod treasury_governance {
 
         /// Check if an account is a registered voter
         #[ink(message)]
-        pub fn is_registered_voter(&self, account: AccountId) -> bool {
+        pub fn is_registered_voter(&self, account: H160) -> bool {
             self.registered_voters.get(account).is_some()
         }
     }

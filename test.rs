@@ -12,7 +12,7 @@ mod tests {
     #[ink::test]
     fn voter_registration_works() {
         let mut contract = TreasuryGovernance::new();
-        let accounts = ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
+        let accounts = ink::env::test::default_accounts();
         
         // Register voter
         assert!(contract.register_voter().is_ok());
@@ -23,7 +23,7 @@ mod tests {
     #[ink::test]
     fn proposal_creation_works() {
         let mut contract = TreasuryGovernance::new();
-        let _accounts = ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
+        let _accounts = ink::env::test::default_accounts();
         
         // Register voter first
         contract.register_voter().unwrap();
@@ -55,7 +55,7 @@ mod tests {
     #[ink::test]
     fn voting_works() {
         let mut contract = TreasuryGovernance::new();
-        let accounts = ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
+        let accounts = ink::env::test::default_accounts();
         
         // Register voter
         contract.register_voter().unwrap();
@@ -91,7 +91,7 @@ mod tests {
     #[ink::test]
     fn double_voting_prevention() {
         let mut contract = TreasuryGovernance::new();
-        let _accounts = ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
+        let _accounts = ink::env::test::default_accounts();
         
         // Register voter
         contract.register_voter().unwrap();
@@ -169,7 +169,7 @@ mod tests {
     #[ink::test]
     fn quorum_calculation() {
         let mut contract = TreasuryGovernance::new();
-        let _accounts = ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
+        let _accounts = ink::env::test::default_accounts();
         
         // Register multiple voters
         contract.register_voter().unwrap();
@@ -204,7 +204,7 @@ mod tests {
     #[ink::test]
     fn proposal_status_update() {
         let mut contract = TreasuryGovernance::new();
-        let _accounts = ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
+        let _accounts = ink::env::test::default_accounts();
         
         // Register voter
         contract.register_voter().unwrap();
@@ -243,7 +243,7 @@ mod tests {
     #[ink::test]
     fn proposal_execution() {
         let mut contract = TreasuryGovernance::new();
-        let _accounts = ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
+        let _accounts = ink::env::test::default_accounts();
         
         // Register voter
         contract.register_voter().unwrap();
@@ -282,7 +282,7 @@ mod tests {
     #[ink::test]
     fn proposal_results_and_statistics() {
         let mut contract = TreasuryGovernance::new();
-        let _accounts = ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
+        let _accounts = ink::env::test::default_accounts();
         
         // Register voter
         contract.register_voter().unwrap();
@@ -344,4 +344,3 @@ mod tests {
         assert_eq!(stats.total_voters, 1);
     }
 }
-
