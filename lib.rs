@@ -30,10 +30,10 @@ mod treasury_governance {
     }
 
     impl VotingPeriod {
-        /// Convert voting period to block numbers (assuming 6-second block time)
+        /// Convert voting period to block numbers
         pub fn to_blocks(&self) -> u32 {
             match self {
-                VotingPeriod::ThreeDays => 3 * 24 * 60 * 10, // 3 days * 24 hours * 60 minutes * 10 blocks per minute
+                VotingPeriod::ThreeDays => 3 * 24 * 60 * 10, 
                 VotingPeriod::SevenDays => 7 * 24 * 60 * 10,
                 VotingPeriod::FourteenDays => 14 * 24 * 60 * 10,
                 VotingPeriod::ThirtyDays => 30 * 24 * 60 * 10,
